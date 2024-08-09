@@ -1,6 +1,9 @@
 package orderedmap
 
-import "sort"
+import (
+	"errors"
+	"sort"
+)
 
 type Pair struct {
 	Key   string
@@ -19,9 +22,14 @@ func NewOrderedMap() *OrderedMap {
 	}
 }
 
-func (o *OrderedMap) Set(key, value string) {
+func (o *OrderedMap) Set(key, value string) error {
+	if (key == "") {
+		return errors.New("key cannot be empty")
+	}
 	o.keyToCounter[key] = len(o.keyToPair)
 	o.keyToPair[key] = Pair{key, value}
+
+	return nil
 }
 
 func (o *OrderedMap) Get(key string) string {

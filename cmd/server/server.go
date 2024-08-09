@@ -6,7 +6,7 @@ import (
 
 	awssqs "github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/joho/godotenv"
-	"github.com/thykof/lightblocks-home-assignment/int/handler"
+	serverpkg "github.com/thykof/lightblocks-home-assignment/int/server"
 	"github.com/thykof/lightblocks-home-assignment/pkg/sqs"
 )
 
@@ -21,12 +21,15 @@ func main() {
 
 	s := sqs.NewSQS(queueURL)
 
+	server := serverpkg.NewServer()
+
 	chnMessages := make(chan *awssqs.Message)
 	go s.PollMessages(chnMessages)
 
 	for message := range chnMessages {
 		if message != nil {
-			handler.Handle(*message.Body)
+			server.Handle(*message.Body)
+			s.DeleteMessage(message.ReceiptHandle)
 		}
 	}
 }

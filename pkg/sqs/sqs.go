@@ -55,8 +55,16 @@ func (s *SQS) ReceiveMessage() (*sqs.Message, error) {
 	return result.Messages[0], nil
 }
 
-func (s *SQS) PollMessages(chn chan<- *sqs.Message) {
+func (s *SQS) DeleteMessage(receiptHandle *string) error {
+	_, err := s.SQSServiceClient.DeleteMessage(&sqs.DeleteMessageInput{
+		QueueUrl:      aws.String(s.QueueUrl),
+		ReceiptHandle: receiptHandle,
+	})
+	
+	return err
+}
 
+func (s *SQS) PollMessages(chn chan<- *sqs.Message) {
 	for {
 		message, err := s.ReceiveMessage()
 		if err != nil {
