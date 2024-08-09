@@ -1,5 +1,8 @@
 addItem('', 'nothing')
 addItem('foo', 'bar')
+addItem('fo
+addItem(
+addItem
 addItem('foo2', 'bar2')
 addItem('foo3', 'bar3')
 deleteItem('foo2')

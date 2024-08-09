@@ -1,6 +1,7 @@
 package server
 
 import (
+	"errors"
 	"log"
 	"strings"
 )
@@ -31,24 +32,45 @@ func (s Server) Handle(message string) {
 }
 
 func (s *Server) AddItem(params string) {
-	key := s.parseKey(params)
-	value := s.parseValue(params)
-	err := s.Data.Set(key, value)
+	key, err := s.parseKey(params)
+	if err != nil {
+		log.Printf("Error parsing key: %s", err)
+		return
+	}
+
+	value, err := s.parseValue(params)
+	if err != nil {
+		log.Printf("Error parsing value: %s", err)
+		return
+	}
+
+	err = s.Data.Set(key, value)
 	if err != nil {
 		log.Printf("Error adding item: %s", err)
 		return
 	}
+
 	log.Printf("Adding item: %s => %s", key, value)
 }
 
 func (s *Server) DeleteItem(params string) {
-	key := s.parseKey(params)
+	key, err := s.parseKey(params)
+	if err != nil {
+		log.Printf("Error parsing key: %s", err)
+		return
+	}
+
 	s.Data.Delete(key)
 	log.Printf("Deleting item: %s", key)
 }
 
 func (s *Server) GetItem(params string) {
-	key := s.parseKey(params)
+	key, err := s.parseKey(params)
+	if err != nil {
+		log.Printf("Error parsing key: %s", err)
+		return
+	}
+
 	value := s.Data.Get(key)
 	log.Printf("Item: %s => %s", key, value)
 }
@@ -60,20 +82,20 @@ func (s *Server) GetAllItems() {
 	}
 }
 
-func (s *Server) parseKey(params string) string {
+func (s *Server) parseKey(params string) (string, error) {
 	paramsSplit := strings.Split(params, "'")
 	if len(paramsSplit) < 1 {
-		log.Printf("Invalid params: %s", params)
-		return ""
+		return "", errors.New("invalid params")
 	}
-	return paramsSplit[1]
+
+	return paramsSplit[1], nil
 }
 
-func (s *Server) parseValue(params string) string {
+func (s *Server) parseValue(params string) (string, error) {
 	paramsSplit := strings.Split(params, "'")
 	if len(paramsSplit) < 3 {
-		log.Printf("Invalid params: %s", params)
-		return ""
+		return "", errors.New("invalid params")
 	}
-	return paramsSplit[3]
+
+	return paramsSplit[3], nil
 }
