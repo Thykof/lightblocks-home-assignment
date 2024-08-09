@@ -20,19 +20,19 @@ func (s Server) Handle(message string) {
 
 	switch functionName {
 		case "addItem":
-			s.AddItem(params)
+			s.addItem(params)
 		case "deleteItem":
-			s.DeleteItem(params)
+			s.deleteItem(params)
 		case "getItem":
 			s.GetItem(params)
 		case "getAllItems":
-			s.GetAllItems()
+			s.getAllItems()
 		default:
 			log.Printf("Invalid function: %s", functionName)
 	}
 }
 
-func (s *Server) AddItem(params string) {
+func (s *Server) addItem(params string) {
 	key, err := s.parseKey(params)
 	if err != nil {
 		log.Printf("Error parsing key: %s", err)
@@ -54,7 +54,7 @@ func (s *Server) AddItem(params string) {
 	log.Printf("Adding item: %s => %s", key, value)
 }
 
-func (s *Server) DeleteItem(params string) {
+func (s *Server) deleteItem(params string) {
 	key, err := s.parseKey(params)
 	if err != nil {
 		log.Printf("Error parsing key: %s", err)
@@ -76,7 +76,7 @@ func (s *Server) GetItem(params string) {
 	log.Printf("Item: %s => %s", key, value)
 }
 
-func (s *Server) GetAllItems() {
+func (s *Server) getAllItems() {
 	log.Printf("Getting all items")
 	for _, pair := range s.Data.GetAll() {
 		log.Printf("Item: %s => %s", pair.Key, pair.Value)
