@@ -71,6 +71,8 @@ func (s *SQS) PollMessages(chn chan<- *sqs.Message) {
 			log.Printf("failed to fetch sqs message %v", err)
 		}
 
-		chn <- message
+		if message != nil {
+			chn <- message
+		}
 	}
 }

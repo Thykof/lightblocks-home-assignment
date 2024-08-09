@@ -16,14 +16,15 @@ func (s Server) Handle(message string) {
 	}
 
 	functionName := messageSplit[0]
+	params := messageSplit[1]
 
 	switch functionName {
 		case "addItem":
-			s.AddItem(messageSplit[1])
+			s.AddItem(params)
 		case "deleteItem":
-			s.DeleteItem(messageSplit[1])
+			s.DeleteItem(params)
 		case "getItem":
-			s.GetItem(messageSplit[1])
+			s.GetItem(params)
 		case "getAllItems":
 			s.GetAllItems()
 		default:

@@ -26,10 +26,5 @@ func GetInputMessages(filePath string) []string {
 		log.Fatalf("failed to read file: %v", err)
 	}
 
-	// Print all lines (for verification purposes)
-	for idx, line := range lines {
-		log.Printf("Line %d: %s\n", idx+1, line)
-	}
-
 	return lines
 }

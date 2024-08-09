@@ -27,9 +27,7 @@ func main() {
 	go s.PollMessages(chnMessages)
 
 	for message := range chnMessages {
-		if message != nil {
-			server.Handle(*message.Body)
-			s.DeleteMessage(message.ReceiptHandle)
-		}
+		server.Handle(*message.Body)
+		s.DeleteMessage(message.ReceiptHandle)
 	}
 }
