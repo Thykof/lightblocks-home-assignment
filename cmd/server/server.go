@@ -27,7 +27,9 @@ func main() {
 	go s.PollMessages(chnMessages)
 
 	for message := range chnMessages {
-		server.Handle(*message.Body)
-		s.DeleteMessage(message.ReceiptHandle)
+		go func(message *awssqs.Message) {
+			server.Handle(*message.Body)
+			s.DeleteMessage(message.ReceiptHandle)
+		}(message)
 	}
 }
