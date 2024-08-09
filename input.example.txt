@@ -1,0 +1,6 @@
+addItem('foo', 'bar')
+addItem('foo2', 'bar2')
+addItem('foo3', 'bar3')
+deleteItem('foo2)
+getItem('foo')
+getAllItems()
