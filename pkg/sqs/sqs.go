@@ -54,3 +54,15 @@ func (s *SQS) ReceiveMessage() (*sqs.Message, error) {
 
 	return result.Messages[0], nil
 }
+
+func (s *SQS) PollMessages(chn chan<- *sqs.Message) {
+
+	for {
+		message, err := s.ReceiveMessage()
+		if err != nil {
+			log.Printf("failed to fetch sqs message %v", err)
+		}
+
+		chn <- message
+	}
+}
